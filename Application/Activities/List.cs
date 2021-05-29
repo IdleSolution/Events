@@ -10,9 +10,9 @@ namespace Application.Activities
 {
     public class List
     {
-        public class Query : IRequest<ICollection<Activity>> { }
+        public class Query : IRequest<List<Activity>> { }
 
-        public class Handler : IRequestHandler<Query, ICollection<Activity>>
+        public class Handler : IRequestHandler<Query, List<Activity>>
         {
             private readonly DataContext _context;
 
@@ -21,7 +21,7 @@ namespace Application.Activities
                 _context = context;
             }
 
-            public async Task<ICollection<Activity>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<Activity>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var activities = await _context.Activities.ToListAsync();
 
