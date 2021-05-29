@@ -12,6 +12,6 @@ namespace Domain
         public DateTime Date { get; set; }
         public string Venue { get; set; }
         public string City { get; set; }
-        public ICollection<Atendee> Atendees { get; set; }
+        public ICollection<ActivityAtendee> Atendees { get; set; }
     }
 }

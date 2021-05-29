@@ -6,7 +6,7 @@ namespace Domain
     {
         public string Name { get; set; }
         public string Email { get; set; }
-        public ICollection<Activity> Activities { get; set; }
+        public ICollection<ActivityAtendee> Activities { get; set; }
 
 
 
