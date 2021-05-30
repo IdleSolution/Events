@@ -49,6 +49,11 @@ namespace Application.Atendees
                     throw new RestException(HttpStatusCode.NotFound, new { Activity = "The activity you are trying to attend to was not found!" });
                 }
 
+                if (await _context.ActivityAtendees.FindAsync(request.AtendeeEmail, request.ActivityId) != null)
+                {
+                    throw new RestException(HttpStatusCode.BadRequest, new { Activity = "User with this email joined this activity already!" });
+                }
+
                 var count = _context.ActivityAtendees.Where(x => x.ActivityId == request.ActivityId).ToArray().Count();
 
                 if (count == 25)
@@ -56,11 +61,7 @@ namespace Application.Atendees
                     throw new RestException(HttpStatusCode.BadRequest, new { Activity = "The activity is full already!" });
                 }
 
-                var atendee = new Atendee
-                {
-                    Email = request.AtendeeEmail,
-                    Name = request.AtendeeName
-                };
+
 
                 var user = await _context.Atendees.FindAsync(request.AtendeeEmail);
 
@@ -69,11 +70,23 @@ namespace Application.Atendees
                     throw new RestException(HttpStatusCode.BadRequest, new { Atendee = "Your email is already taken by someone with a different name!" });
                 }
 
-                if (user == null) _context.Atendees.Add(user);
+
+                if (user == null)
+                {
+                    user = new Atendee
+                    {
+                        Email = request.AtendeeEmail,
+                        Name = request.AtendeeName
+                    };
+
+                    _context.Atendees.Add(user);
+                }
+
+
 
                 var activityAtendee = new ActivityAtendee
                 {
-                    Atendee = atendee,
+                    Atendee = user,
                     AtendeeEmail = request.AtendeeEmail,
                     Activity = activity,
                     ActivityId = request.ActivityId
