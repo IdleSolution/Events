@@ -46,7 +46,7 @@ namespace Application.Atendees
 
                 if (activity == null)
                 {
-                    throw new RestException(HttpStatusCode.NotFound, new { Activity = "The activity you are trying to delete was not found!" });
+                    throw new RestException(HttpStatusCode.NotFound, new { Activity = "The activity you are trying to attend to was not found!" });
                 }
 
                 var count = _context.ActivityAtendees.Where(x => x.ActivityId == request.ActivityId).ToArray().Count();
@@ -62,9 +62,14 @@ namespace Application.Atendees
                     Name = request.AtendeeName
                 };
 
-                var user = _context.Atendees.FindAsync(request.AtendeeEmail);
+                var user = await _context.Atendees.FindAsync(request.AtendeeEmail);
 
-                if (user == null) _context.Atendees.Add(atendee);
+                if (user != null && user.Name != request.AtendeeName)
+                {
+                    throw new RestException(HttpStatusCode.BadRequest, new { Atendee = "Your email is already taken by someone with a different name!" });
+                }
+
+                if (user == null) _context.Atendees.Add(user);
 
                 var activityAtendee = new ActivityAtendee
                 {
