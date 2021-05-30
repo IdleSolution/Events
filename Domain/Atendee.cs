@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Domain
 {
@@ -6,9 +7,8 @@ namespace Domain
     {
         public string Name { get; set; }
         public string Email { get; set; }
-        public ICollection<ActivityAtendee> Activities { get; set; }
-
-
+        [JsonIgnore]
+        public ICollection<ActivityAtendee> ActivityAtendees { get; set; }
 
     }
 }

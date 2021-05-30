@@ -10,8 +10,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210529114054_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20210530111258_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,21 +21,6 @@ namespace Persistence.Migrations
                 .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ActivityAtendee", b =>
-                {
-                    b.Property<Guid>("ActivitiesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AtendeesEmail")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ActivitiesId", "AtendeesEmail");
-
-                    b.HasIndex("AtendeesEmail");
-
-                    b.ToTable("ActivityAtendee");
-                });
-
             modelBuilder.Entity("Domain.Activity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -43,6 +28,9 @@ namespace Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
@@ -62,6 +50,21 @@ namespace Persistence.Migrations
                     b.ToTable("Activities");
                 });
 
+            modelBuilder.Entity("Domain.ActivityAtendee", b =>
+                {
+                    b.Property<string>("AtendeeEmail")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("ActivityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("AtendeeEmail", "ActivityId");
+
+                    b.HasIndex("ActivityId");
+
+                    b.ToTable("ActivityAtendees");
+                });
+
             modelBuilder.Entity("Domain.Atendee", b =>
                 {
                     b.Property<string>("Email")
@@ -75,19 +78,33 @@ namespace Persistence.Migrations
                     b.ToTable("Atendees");
                 });
 
-            modelBuilder.Entity("ActivityAtendee", b =>
+            modelBuilder.Entity("Domain.ActivityAtendee", b =>
                 {
-                    b.HasOne("Domain.Activity", null)
-                        .WithMany()
-                        .HasForeignKey("ActivitiesId")
+                    b.HasOne("Domain.Activity", "Activity")
+                        .WithMany("Atendees")
+                        .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Atendee", null)
-                        .WithMany()
-                        .HasForeignKey("AtendeesEmail")
+                    b.HasOne("Domain.Atendee", "Atendee")
+                        .WithMany("Activities")
+                        .HasForeignKey("AtendeeEmail")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Activity");
+
+                    b.Navigation("Atendee");
+                });
+
+            modelBuilder.Entity("Domain.Activity", b =>
+                {
+                    b.Navigation("Atendees");
+                });
+
+            modelBuilder.Entity("Domain.Atendee", b =>
+                {
+                    b.Navigation("Activities");
                 });
 #pragma warning restore 612, 618
         }
