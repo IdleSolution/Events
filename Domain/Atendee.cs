@@ -7,6 +7,7 @@ namespace Domain
     {
         public string Name { get; set; }
         public string Email { get; set; }
+
         [JsonIgnore]
         public ICollection<ActivityAtendee> ActivityAtendees { get; set; }
 

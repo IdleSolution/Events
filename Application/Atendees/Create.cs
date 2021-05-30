@@ -62,7 +62,6 @@ namespace Application.Atendees
                 }
 
 
-
                 var user = await _context.Atendees.FindAsync(request.AtendeeEmail);
 
                 if (user != null && user.Name != request.AtendeeName)
