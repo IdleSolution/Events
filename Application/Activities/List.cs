@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain;
@@ -10,9 +11,9 @@ namespace Application.Activities
 {
     public class List
     {
-        public class Query : IRequest<List<Activity>> { }
+        public class Query : IRequest<List<ActivityList>> { }
 
-        public class Handler : IRequestHandler<Query, List<Activity>>
+        public class Handler : IRequestHandler<Query, List<ActivityList>>
         {
             private readonly DataContext _context;
 
@@ -21,9 +22,24 @@ namespace Application.Activities
                 _context = context;
             }
 
-            public async Task<List<Activity>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<ActivityList>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activities = await _context.Activities.ToListAsync();
+                var activities = await _context.Activities
+                            .Include(x => x.ActivityAtendees)
+                            .ThenInclude(x => x.Atendee)
+                            .Select(x => new ActivityList
+                            {
+                                Id = x.Id,
+                                Title = x.Title,
+                                Description = x.Description,
+                                Category = x.Category,
+                                Date = x.Date,
+                                Venue = x.Venue,
+                                City = x.City,
+                                Atendees = (ICollection<Atendee>)x.ActivityAtendees.Select(x => x.Atendee)
+
+                            })
+                            .ToListAsync();
 
                 return activities;
             }
