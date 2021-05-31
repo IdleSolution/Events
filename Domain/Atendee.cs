@@ -10,6 +10,5 @@ namespace Domain
 
         [JsonIgnore]
         public ICollection<ActivityAtendee> ActivityAtendees { get; set; }
-
     }
 }

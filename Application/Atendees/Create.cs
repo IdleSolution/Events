@@ -51,14 +51,14 @@ namespace Application.Atendees
 
                 if (await _context.ActivityAtendees.FindAsync(request.AtendeeEmail, request.ActivityId) != null)
                 {
-                    throw new RestException(HttpStatusCode.BadRequest, new { Activity = "User with this email joined this activity already!" });
+                    throw new RestException(HttpStatusCode.Conflict, new { Activity = "User with this email joined this activity already!" });
                 }
 
                 var count = _context.ActivityAtendees.Where(x => x.ActivityId == request.ActivityId).ToArray().Count();
 
                 if (count == 25)
                 {
-                    throw new RestException(HttpStatusCode.BadRequest, new { Activity = "The activity is full already!" });
+                    throw new RestException(HttpStatusCode.Conflict, new { Activity = "The activity is full already!" });
                 }
 
 
@@ -66,7 +66,7 @@ namespace Application.Atendees
 
                 if (user != null && user.Name != request.AtendeeName)
                 {
-                    throw new RestException(HttpStatusCode.BadRequest, new { Atendee = "Your email is already taken by someone with a different name!" });
+                    throw new RestException(HttpStatusCode.Conflict, new { Atendee = "Your email is already taken by someone with a different name!" });
                 }
 
 
