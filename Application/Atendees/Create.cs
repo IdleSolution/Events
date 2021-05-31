@@ -19,7 +19,6 @@ namespace Application.Atendees
             public Guid ActivityId { get; set; }
             public string AtendeeEmail { get; set; }
             public string AtendeeName { get; set; }
-
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -71,7 +70,7 @@ namespace Application.Atendees
                     throw new RestException(HttpStatusCode.Conflict, new { Atendee = "Your email is already taken by someone with a different name!" });
                 }
 
-                // If user haven't ever signed for any activity, add him to the database
+                // If user hasn't ever signed for any activity, add him to the database
                 if (user == null)
                 {
                     user = new Atendee
@@ -86,9 +85,7 @@ namespace Application.Atendees
                 var activityAtendee = new ActivityAtendee
                 {
                     Atendee = user,
-                    AtendeeEmail = request.AtendeeEmail,
-                    Activity = activity,
-                    ActivityId = request.ActivityId
+                    Activity = activity
                 };
 
                 _context.ActivityAtendees.Add(activityAtendee);
