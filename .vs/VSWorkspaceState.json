@@ -1,0 +1,10 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Domain",
+    "\\Persistence",
+    "\\Tests"
+  ],
+  "SelectedNode": "\\Tests\\DataContextFactory.cs",
+  "PreviewInSolutionExplorer": false
+}
