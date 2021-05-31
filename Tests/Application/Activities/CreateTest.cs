@@ -12,7 +12,7 @@ namespace Tests.Application.Activities
     public class CreateTest : ApplicationTestBase
     {
         [Fact]
-        public async Task Handle_ShouldPersistActivity()
+        public async Task Handle_ShouldPersistAddedData()
         {
             var command = new Create.Command
             {

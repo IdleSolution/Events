@@ -13,7 +13,7 @@ namespace Tests.Application.Activities
     public class DeleteTest : ApplicationTestBase
     {
         [Fact]
-        public async Task Handle_ShouldRemovePersistedActivity()
+        public async Task Handle_ShouldRemovePersistedData()
         {
             // activity that was added during seeding
             var id = Guid.Parse("ab2bad5c-44cf-4ed2-b240-845784ee6f60");
@@ -32,7 +32,7 @@ namespace Tests.Application.Activities
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnErrorOnWrongIds()
+        public async Task Handle_ShouldReturnErrorOnNotFoundActivity()
         {
             // this id doesnt exists in our data
             var id = Guid.Parse("cb2bad5c-44cf-4ed2-b240-845784ee6f60");

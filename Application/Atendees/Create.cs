@@ -11,6 +11,7 @@ using Persistence;
 
 namespace Application.Atendees
 {
+    // Signs up user for an activity
     public class Create
     {
         public class Command : IRequest
@@ -64,12 +65,13 @@ namespace Application.Atendees
 
                 var user = await _context.Atendees.FindAsync(request.AtendeeEmail);
 
+                // Once a user signed up with his email for any event, he always has to give the same name for all events
                 if (user != null && user.Name != request.AtendeeName)
                 {
                     throw new RestException(HttpStatusCode.Conflict, new { Atendee = "Your email is already taken by someone with a different name!" });
                 }
 
-
+                // If user haven't ever signed for any activity, add him to the database
                 if (user == null)
                 {
                     user = new Atendee
@@ -81,8 +83,6 @@ namespace Application.Atendees
                     _context.Atendees.Add(user);
                 }
 
-
-
                 var activityAtendee = new ActivityAtendee
                 {
                     Atendee = user,
@@ -92,7 +92,6 @@ namespace Application.Atendees
                 };
 
                 _context.ActivityAtendees.Add(activityAtendee);
-
 
                 bool success = await _context.SaveChangesAsync() > 0;
 
