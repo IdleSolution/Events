@@ -16,14 +16,18 @@ namespace Tests
 
             var dbContext = new DataContext(options);
 
+            dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
+
+            SeedSampleData(dbContext);
 
             return dbContext;
         }
 
         public static void SeedSampleData(DataContext dbContext)
         {
-            var id = new Guid();
+            
+            var id = Guid.Parse("e0a2c36b-c679-4fbd-b966-574e11681c7c");
             var activity = new Activity
             {
                 Id = id,
@@ -49,6 +53,19 @@ namespace Tests
                 Atendee = atendee,
                 Activity = activity
             });
+
+            dbContext.Activities.Add(new Activity
+            {
+                Id = Guid.Parse("ab2bad5c-44cf-4ed2-b240-845784ee6f60"),
+                Title = "Event2",
+                Description = "Nice event",
+                Category = "Test",
+                Date = DateTime.Now,
+                Venue = "Park",
+                City = "Krakow"
+            });
+
+            dbContext.SaveChanges();
         }
     }
 }
